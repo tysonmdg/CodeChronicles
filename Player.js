@@ -3,6 +3,10 @@ const MOVING = 1;
 const RIGHT = 0;
 const LEFT  = 1;
 const SPRITE_SIZE = 64;
+const JUMPFORCE = 60;
+const GRAVITY = 2;
+const FLOORHEIGHT = 400;
+const MAX_BUF_SIZE = 3;
 
 const SPEED = 15;
 class Player {
@@ -19,11 +23,14 @@ class Player {
     this.setSpritePosition(0, 0, SPRITE_SIZE, SPRITE_SIZE);
 
     // inicializa el buffer de entrada
-    this.inputBuffer = [];
-
-    this.state  = IDLE;
-    this.facing = RIGHT;
-    this.counter = 0;
+    this.inputBuffer = "";
+    
+    this.state    = IDLE;
+    this.facing   = RIGHT;
+    this.ySpeed   = 0;     //used for jumps
+    this.counter  = 0;
+    this.jumpTime = 0;
+    this.jumping  = false;
   }
 
   setState(newState){ this.state = newState; }
@@ -43,16 +50,20 @@ class Player {
   }
 
   // método para mover el jugador hacia la izquierda
-  moveLeft() { this.inputBuffer.push("left"); this.facing = LEFT; }
+  moveLeft() {
+    this.inputBuffer = "left";
+    this.facing = LEFT;
+  }
 
   // método para mover el jugador hacia la derecha
-  moveRight() { this.inputBuffer.push("right"); this.facing = RIGHT; }
+  moveRight() {
+    this.inputBuffer = "right"; 
+    this.facing = RIGHT;
+  }
 
-  // método para mover el jugador hacia arriba
-  moveUp() { this.inputBuffer.push("up"); }
-
-  // método para mover el jugador hacia abajo
-  moveDown() { this.inputBuffer.push("down"); }
+  jump() { 
+    if(!this.jumping) { this.inputBuffer = "jump"; }
+  }
 
   update(){
     this.updateMovement();
@@ -62,30 +73,42 @@ class Player {
 
   // método para actualizar la posición del jugador basado en el buffer de entrada
   updateMovement() {
+    if(this.jumping){
+      //aplicar parábola
+      this.y = FLOORHEIGHT + (this.ySpeed*this.jumpTime - (GRAVITY*this.jumpTime*this.jumpTime)/2) * (-1);
+      if(this.y > FLOORHEIGHT){
+        this.jumping = false;
+        this.y       = FLOORHEIGHT;
+        this.ySpeed  = 0;
+      }
+      else{
+        this.ySpeed  = JUMPFORCE - GRAVITY*this.jumpTime;
+      }
+      this.jumpTime++;
+    }
+
     // comprueba si hay alguna entrada en el buffer
     if (this.inputBuffer.length > 0) {
-      // obtiene la última entrada del buffer
-      const input = this.inputBuffer.pop();
-      // mueve el jugador en la dirección correspondiente
-      switch (input) {
+      switch (this.inputBuffer) {
         case "left":
           this.x -= SPEED;
           break;
         case "right":
           this.x += SPEED;
           break;
-        case "up":
-          this.y -= SPEED;
+        case "jump":          
+          this.jumping  = true;
+          this.ySpeed   = JUMPFORCE;
+          this.jumpTime = 0;
           break;
-        case "down":
-          this.y += SPEED;
-          break;
-      }
+        }
       this.state = MOVING;
     }
     else{  this.state = IDLE; }
+
     // actualiza la posición del jugador en pantalla
     this.updatePosition();
+    this.inputBuffer = "";
   }
 
   updateSprite(){
