@@ -1,0 +1,7 @@
+img {
+  border: none;
+}
+
+img:focus {
+  outline: none;
+}
