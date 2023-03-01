@@ -1,14 +1,19 @@
-const IDLE   = 0;
-const MOVING = 1;
-const RIGHT = 0;
-const LEFT  = 1;
-const SPRITE_SIZE = 64;
-const JUMPFORCE = 60;
-const GRAVITY = 2;
-const FLOORHEIGHT = 400;
-const MAX_BUF_SIZE = 3;
+const SPRITE_SIZE     = 64;
+const IDLE_FRAME_RATE = 20; //duracion de cada postura del sprite durante la animacion de idle       (medido en numero de frames)
+const MOVI_FRAME_RATE = 10; //duracion de cada postura del sprite durante la animacion de movimiento (medido en numero de frames)
 
-const SPEED = 15;
+const GRAVITIES     = { "LUNA": 0.165, "TIERRA": 1, "MARTE": 0.379, "JUPITER": 2.528, "SATURNO": 1.065, "URANO": 0.904, "NEPTUNO": 1.137 };
+const SPEED         = 5;
+const JUMPFORCE     = 17;
+const FLOORHEIGHT   = 599;
+const GRAVITY       = GRAVITIES["LUNA"];
+
+//no tocar partir de este punto: =======================
+const IDLE          = 0;
+const MOVING        = 1;
+const RIGHT         = 0;
+const LEFT          = 1;
+//======================================================
 class Player {
   constructor(x, y, imageSrc) {
     this.x = x; // posición en el eje X
@@ -18,19 +23,19 @@ class Player {
     this.myImg = document.createElement("img");
     //this.myImg.setAttribute("src",getImg(this.imgName));
     this.myImg.style.position = "absolute"; // establece posición absoluta
+    this.myImg.style["border-style"] = "none";
     document.getElementById("player").append(this.myImg);
 
     this.setSpritePosition(0, 0, SPRITE_SIZE, SPRITE_SIZE);
 
     // inicializa el buffer de entrada
-    this.inputBuffer = "";
-    
-    this.state    = IDLE;
-    this.facing   = RIGHT;
-    this.ySpeed   = 0;     //used for jumps
-    this.counter  = 0;
-    this.jumpTime = 0;
-    this.jumping  = false;
+    this.inputBuffer    = "";    
+    this.state          = IDLE;
+    this.facing         = RIGHT;
+    this.onAir          = false;  //whether the player is currently jumping or not
+    this.ySpeed         = 0;      //used for jumps
+    this.airTime        = 0;      //used to track the time during a jump or free fall
+    this.spriteCounter  = 0;      //used to know how to update the sprite animations
   }
 
   setState(newState){ this.state = newState; }
@@ -61,30 +66,28 @@ class Player {
     this.facing = RIGHT;
   }
 
-  jump() { 
-    if(!this.jumping) { this.inputBuffer = "jump"; }
-  }
+  // método para hacer saltar al jugador
+  jump() { if(!this.onAir) { this.inputBuffer = "jump"; } }
 
-  update(){
-    this.updateMovement();
-    this.updateSprite();
-    this.counter++;
+  update(time){
+    this.updateMovement(time);
+    this.updateSprite(time);
   }
 
   // método para actualizar la posición del jugador basado en el buffer de entrada
-  updateMovement() {
-    if(this.jumping){
+  updateMovement(time) {
+    if(this.onAir){
       //aplicar parábola
-      this.y = FLOORHEIGHT + (this.ySpeed*this.jumpTime - (GRAVITY*this.jumpTime*this.jumpTime)/2) * (-1);
+      this.y = FLOORHEIGHT + (this.ySpeed*this.airTime - (GRAVITY*this.airTime*this.airTime)/2) * (-1);
       if(this.y > FLOORHEIGHT){
-        this.jumping = false;
+        this.onAir   = false;
         this.y       = FLOORHEIGHT;
         this.ySpeed  = 0;
       }
       else{
-        this.ySpeed  = JUMPFORCE - GRAVITY*this.jumpTime;
+        this.ySpeed  = JUMPFORCE - GRAVITY*this.airTime;
       }
-      this.jumpTime++;
+      this.airTime++;
     }
 
     // comprueba si hay alguna entrada en el buffer
@@ -97,9 +100,9 @@ class Player {
           this.x += SPEED;
           break;
         case "jump":          
-          this.jumping  = true;
+          this.airTime  = 0;
+          this.onAir    = true;
           this.ySpeed   = JUMPFORCE;
-          this.jumpTime = 0;
           break;
         }
       this.state = MOVING;
@@ -111,7 +114,9 @@ class Player {
     this.inputBuffer = "";
   }
 
-  updateSprite(){
-    this.setSpritePosition((this.counter%4)*SPRITE_SIZE, (this.state*2 + this.facing)*SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE);
+  updateSprite(time){
+    this.setSpritePosition((this.spriteCounter%4)*SPRITE_SIZE, (this.state*2 + this.facing)*SPRITE_SIZE, SPRITE_SIZE, SPRITE_SIZE);
+    let updater = this.state == MOVING ? MOVI_FRAME_RATE : IDLE_FRAME_RATE;
+    if(time % updater == 0){ this.spriteCounter++; }
   }
 }

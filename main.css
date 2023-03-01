@@ -3,6 +3,7 @@ img {
   outline: none;
 }
 
-#player {
-  background-color: white;
+.NPC {
+  border: none !important;
+  outline: none;
 }
