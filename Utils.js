@@ -1,1 +1,0 @@
-function getImg(name) { return "src/img/" + name; };
