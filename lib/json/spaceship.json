@@ -1,0 +1,19 @@
+{
+    "frames": [
+        { "filename": "NE_Center",      "frame": { "x":  84, "y":   0, "w": 78, "h": 72 }},
+        { "filename": "NE_Left",        "frame": { "x":  14, "y":   0, "w": 60, "h": 72 }},
+        { "filename": "NE_Right",       "frame": { "x": 252, "y":   0, "w": 60, "h": 72 }},
+        { "filename": "CenterUP_00",    "frame": { "x":   0, "y":  86, "w": 78, "h": 86 }},
+        { "filename": "CenterUP_01",    "frame": { "x":  84, "y":  86, "w": 78, "h": 86 }},
+        { "filename": "CenterDOWN_00",  "frame": { "x": 166, "y":  86, "w": 78, "h": 72 }},
+        { "filename": "CenterDOWN_01",  "frame": { "x": 248, "y":  86, "w": 78, "h": 72 }},
+        { "filename": "LeftUP_00",      "frame": { "x":  14, "y": 172, "w": 60, "h": 86 }},
+        { "filename": "LeftUP_01",      "frame": { "x":  98, "y": 172, "w": 60, "h": 80 }},
+        { "filename": "LeftDOWN_00",    "frame": { "x": 180, "y": 172, "w": 60, "h": 72 }},
+        { "filename": "LeftDOWN_01",    "frame": { "x": 262, "y": 172, "w": 60, "h": 72 }},
+        { "filename": "RightUP_00",     "frame": { "x":   4, "y": 258, "w": 60, "h": 86 }},
+        { "filename": "RightUP_01",     "frame": { "x":  88, "y": 258, "w": 60, "h": 80 }},
+        { "filename": "RightDOWN_00",   "frame": { "x": 170, "y": 258, "w": 60, "h": 72 }},
+        { "filename": "RightDOWN_01",   "frame": { "x": 252, "y": 258, "w": 60, "h": 72 }}
+    ]
+}
