@@ -1,0 +1,48 @@
+{
+    "VENUS": {
+        "gravity": 0.889,
+        "atmosColor": "0xFFEB57",
+        "transparency": 1
+    },
+    "LUNA": {
+        "gravity": 0.165,
+        "atmosColor": "0x000000",
+        "transparency": 0
+    },
+
+    "TIERRA": {
+        "gravity": 1,
+        "atmosColor": "0xA4AFFF",
+        "transparency": 1
+    },
+
+    "MARTE": {
+        "gravity": 0.379,
+        "atmosColor": "0xFFD7A2",
+        "transparency": 1
+    },
+
+    "JUPITER": {
+        "gravity": 2.528,
+        "atmosColor": "0xFFD7A2",
+        "transparency": 1
+    },
+
+    "SATURNO": {
+        "gravity": 1.065,
+        "atmosColor": "0xFFD7A2",
+        "transparency": 1
+    },
+
+    "URANO": {
+        "gravity": 0.904,
+        "atmosColor": "0xFFD7A2",
+        "transparency": 1
+    },
+
+    "NEPTUNO": {
+        "gravity": 1.137,
+        "atmosColor": "0xFFD7A2",
+        "transparency": 1
+    }
+}
