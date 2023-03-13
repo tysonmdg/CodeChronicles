@@ -1,0 +1,24 @@
+img {
+  border: none !important;
+  outline: none;
+}
+
+.NPC {
+  border: none !important;
+  outline: none;
+}
+
+body {
+     background-image: url("/rsc/img/web/background.png");
+        background-repeat: no-repeat;
+        background-size: cover;
+}
+
+img{
+  display: block;
+  margin: auto;
+}
+
+.juego{
+border:5px solid white;
+}
